@@ -1,0 +1,29 @@
+{% extends "libros/base.html" %}
+{% block content %}
+<div class="toolbar">
+  <a class="btn" href="{% url 'libro_create' %}">+ Nuevo libro</a>
+</div>
+<div class="card">
+  <table>
+    <thead>
+      <tr><th>Título</th><th>Año</th><th>ISBN</th><th>Estado</th><th></th></tr>
+    </thead>
+    <tbody>
+    {% for l in libros %}
+      <tr>
+        <td>{{ l.titulo }}</td>
+        <td>{{ l.anio_publicacion }}</td>
+        <td>{{ l.isbn }}</td>
+        <td><span class="badge">{{ l.get_estado_display }}</span></td>
+        <td class="acciones">
+          <a href="{% url 'libro_update' l.pk %}">Editar</a>
+          <a href="{% url 'libro_delete' l.pk %}">Eliminar</a>
+        </td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="5">No hay libros registrados.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

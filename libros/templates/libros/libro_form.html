@@ -1,0 +1,14 @@
+{% extends "libros/base.html" %}
+{% block content %}
+<div class="card">
+  <h2>{{ accion }} libro</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_div }}
+    <div class="acciones-form">
+      <button class="btn" type="submit">Guardar</button>
+      <a class="btn-link btn" href="{% url 'libro_list' %}">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
