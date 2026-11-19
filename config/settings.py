@@ -65,6 +65,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    "config.security_middleware.ContentSecurityPolicyMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -235,3 +236,6 @@ SECURE_SSL_REDIRECT = (
 
 # HSTS se configura cuando exista HTTPS real.
 SECURE_HSTS_SECONDS = 0
+
+
+WHITENOISE_ALLOW_ALL_ORIGINS = False
