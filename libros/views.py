@@ -1,6 +1,7 @@
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.views import LogoutView
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_GET, require_http_methods
 
@@ -122,3 +123,23 @@ def libro_delete(request, pk):
         "libros/libro_confirm_delete.html",
         {"libro": libro},
     )
+
+
+# =====================================================
+# LOGOUT SEGURO
+# Django permite cerrar sesión mediante POST.
+# Se muestra una confirmación después del logout.
+# =====================================================
+
+class LogoutSeguroView(LogoutView):
+    next_page = "login"
+
+    def post(self, request, *args, **kwargs):
+        respuesta = super().post(request, *args, **kwargs)
+
+        messages.success(
+            request,
+            "Has cerrado sesión correctamente.",
+        )
+
+        return respuesta

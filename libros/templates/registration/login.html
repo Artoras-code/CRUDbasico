@@ -3,7 +3,9 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
     <title>Iniciar sesión | Biblioteca</title>
 
     <style>
@@ -15,6 +17,9 @@
             --text: #f1f5f9;
             --muted: #94a3b8;
             --primary: #6366f1;
+            --success-bg: #064e3b;
+            --success-border: #047857;
+            --success-text: #a7f3d0;
         }
 
         * {
@@ -28,6 +33,7 @@
             align-items: center;
             justify-content: center;
             padding: 24px;
+
             background:
                 radial-gradient(
                     ellipse at 80% 10%,
@@ -35,6 +41,7 @@
                     transparent 50%
                 ),
                 var(--bg);
+
             color: var(--text);
             font-family: Inter, system-ui, sans-serif;
         }
@@ -56,7 +63,13 @@
             height: 64px;
             margin: 0 auto 22px;
             border-radius: 18px;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+
+            background: linear-gradient(
+                135deg,
+                #6366f1,
+                #8b5cf6
+            );
+
             font-size: 2rem;
         }
 
@@ -85,7 +98,7 @@
             font-weight: 600;
         }
 
-        input {
+        input:not([type="hidden"]) {
             width: 100%;
             min-height: 46px;
             padding: 12px 14px;
@@ -120,6 +133,29 @@
             background: #4f46e5;
         }
 
+        /* Mensaje de cierre de sesión exitoso */
+        .success {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 24px;
+            padding: 14px 16px;
+
+            background: var(--success-bg);
+            border: 1px solid var(--success-border);
+            border-radius: 10px;
+            color: var(--success-text);
+
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        .success-icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        /* Credenciales incorrectas */
         .error {
             margin-bottom: 24px;
             padding: 14px;
@@ -147,6 +183,7 @@
 </head>
 
 <body>
+
     <main class="login-card">
 
         <div class="logo">📚</div>
@@ -158,6 +195,20 @@
             Ingresa tus credenciales para continuar.
         </p>
 
+        <!-- Mensajes de Django -->
+        {% for message in messages %}
+            {% if "success" in message.tags %}
+                <div class="success" role="status">
+                    <span class="success-icon">✓</span>
+
+                    <span>
+                        {{ message }}
+                    </span>
+                </div>
+            {% endif %}
+        {% endfor %}
+
+        <!-- Credenciales incorrectas -->
         {% if form.errors %}
             <div class="error" role="alert">
                 Usuario o contraseña incorrectos.
@@ -165,20 +216,29 @@
             </div>
         {% endif %}
 
+        <!-- Formulario protegido con CSRF -->
         <form method="post" action="{% url 'login' %}">
             {% csrf_token %}
 
-            <input type="hidden"
-                   name="next"
-                   value="{{ next }}">
+            <input
+                type="hidden"
+                name="next"
+                value="{{ next }}"
+            >
 
             <div class="field">
-                <label for="id_username">Usuario</label>
+                <label for="id_username">
+                    Usuario
+                </label>
+
                 {{ form.username }}
             </div>
 
             <div class="field">
-                <label for="id_password">Contraseña</label>
+                <label for="id_password">
+                    Contraseña
+                </label>
+
                 {{ form.password }}
             </div>
 
@@ -192,5 +252,6 @@
         </div>
 
     </main>
+
 </body>
 </html>
