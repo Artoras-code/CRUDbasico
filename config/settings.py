@@ -7,13 +7,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DEBUG = os.environ.get("DJANGO_DEBUG", "0") == "1"
 
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
-if not SECRET_KEY:
-    if DEBUG:
-        SECRET_KEY = "solo-para-desarrollo-local-no-usar-en-produccion"
-    else:
-        raise RuntimeError("Falta la variable de entorno DJANGO_SECRET_KEY.")
 
-# En PythonAnywhere: DJANGO_ALLOWED_HOSTS=tuusuario.pythonanywhere.com
+if not SECRET_KEY:
+    raise RuntimeError(
+        "Falta la variable de entorno DJANGO_SECRET_KEY."
+    )
+
+
 ALLOWED_HOSTS = [
     h.strip()
     for h in os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
