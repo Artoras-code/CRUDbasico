@@ -1,14 +1,217 @@
+
 {% extends "libros/base.html" %}
+
+{% block title %}Eliminar libro | Biblioteca{% endblock %}
+
 {% block content %}
-<div class="card">
-  <h2>Eliminar libro</h2>
-  <p>¿Seguro que quieres eliminar «{{ libro.titulo }}»?</p>
-  <form method="post">
-    {% csrf_token %}
-    <div class="acciones-form">
-      <button class="btn btn-danger" type="submit">Sí, eliminar</button>
-      <a class="btn-link btn" href="{% url 'libro_list' %}">Cancelar</a>
+
+<style>
+    .delete-container {
+        max-width: 580px;
+        margin: 0 auto;
+        padding: 20px 0;
+    }
+
+    .delete-heading {
+        text-align: center;
+        margin-bottom: 28px;
+    }
+
+    .delete-icon {
+        display: grid;
+        place-items: center;
+        width: 74px;
+        height: 74px;
+        margin: 0 auto 20px;
+        background: #450a0a;
+        border: 1px solid #7f1d1d;
+        border-radius: 20px;
+        font-size: 2rem;
+    }
+
+    .delete-heading h2 {
+        color: #f8fafc;
+        font-size: 1.7rem;
+        margin: 0 0 12px;
+    }
+
+    .delete-heading p {
+        color: #94a3b8;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    .delete-book-info {
+        padding: 24px;
+        background: #0f172a;
+        border: 1px solid #334155;
+        border-radius: 14px;
+        text-align: center;
+        margin-bottom: 22px;
+    }
+
+    .delete-book-label {
+        color: #94a3b8;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 12px;
+    }
+
+    .delete-book-title {
+        color: #f8fafc;
+        font-size: 1.3rem;
+        font-weight: 700;
+        overflow-wrap: anywhere;
+    }
+
+    .delete-book-details {
+        color: #94a3b8;
+        font-size: 0.85rem;
+        margin-top: 12px;
+    }
+
+    .delete-warning {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 18px;
+        background: #37191d;
+        border: 1px solid #7f1d1d;
+        border-radius: 12px;
+        margin-bottom: 28px;
+    }
+
+    .delete-warning-icon {
+        font-size: 1.3rem;
+        flex-shrink: 0;
+    }
+
+    .delete-warning strong {
+        display: block;
+        color: #fecaca;
+        margin-bottom: 6px;
+    }
+
+    .delete-warning p {
+        color: #fca5a5;
+        font-size: 0.85rem;
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    .delete-actions {
+        display: flex;
+        gap: 14px;
+    }
+
+    .delete-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+        min-height: 48px;
+        padding: 12px 18px;
+        border-radius: 10px;
+        font: inherit;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background 0.2s, transform 0.2s;
+    }
+
+    .delete-cancel {
+        background: #1e293b;
+        border: 1px solid #475569;
+        color: #e2e8f0;
+    }
+
+    .delete-cancel:hover {
+        background: #334155;
+    }
+
+    .delete-confirm {
+        background: #dc2626;
+        border: 1px solid #dc2626;
+        color: white;
+    }
+
+    .delete-confirm:hover {
+        background: #b91c1c;
+        transform: translateY(-1px);
+    }
+
+    @media (max-width: 500px) {
+        .delete-actions {
+            flex-direction: column-reverse;
+        }
+    }
+</style>
+
+<div class="delete-container">
+
+    <div class="delete-heading">
+        <div class="delete-icon">🗑️</div>
+
+        <h2>¿Eliminar este libro?</h2>
+
+        <p>
+            Estás a punto de eliminar un registro
+            de la biblioteca.
+        </p>
     </div>
-  </form>
+
+    <div class="delete-book-info">
+        <div class="delete-book-label">
+            Libro seleccionado
+        </div>
+
+        <div class="delete-book-title">
+            📖 {{ libro.titulo }}
+        </div>
+
+        <div class="delete-book-details">
+            Año: {{ libro.anio_publicacion }}
+            · ISBN: {{ libro.isbn }}
+        </div>
+    </div>
+
+    <div class="delete-warning" role="alert">
+        <span class="delete-warning-icon">⚠️</span>
+
+        <div>
+            <strong>Esta acción es permanente</strong>
+
+            <p>
+                Si confirmas la eliminación, el registro
+                será eliminado de la biblioteca.
+                Esta operación no se puede deshacer
+                desde la aplicación.
+            </p>
+        </div>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="delete-actions">
+            <a
+                href="{% url 'libro_list' %}"
+                class="delete-btn delete-cancel">
+                Cancelar
+            </a>
+
+            <button
+                type="submit"
+                class="delete-btn delete-confirm">
+                Sí, eliminar libro
+            </button>
+        </div>
+    </form>
+
 </div>
+
 {% endblock %}
