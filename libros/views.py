@@ -1,11 +1,12 @@
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_GET, require_http_methods
 
 from .forms import LibroForm
 from .models import Libro
 
 
+@require_GET
 def libro_list(request):
     libros = Libro.objects.all()
     return render(request, "libros/libro_list.html", {"libros": libros})
