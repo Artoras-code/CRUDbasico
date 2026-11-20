@@ -1,14 +1,76 @@
+
 {% extends "libros/base.html" %}
+
+{% block title %}{{ accion }} libro | Biblioteca{% endblock %}
+
 {% block content %}
-<div class="card">
-  <h2>{{ accion }} libro</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_div }}
-    <div class="acciones-form">
-      <button class="btn" type="submit">Guardar</button>
-      <a class="btn-link btn" href="{% url 'libro_list' %}">Cancelar</a>
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'libros/libro_form.css' %}">
+
+<div class="book-form-container">
+
+    <div class="form-heading">
+        <div class="form-icon">📚</div>
+
+        <div>
+            <h2>{{ accion }} libro</h2>
+            <p>
+                Completa la información del libro.
+                Todos los datos serán validados por el servidor.
+            </p>
+        </div>
     </div>
-  </form>
+
+    <form method="post" class="book-form">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+            <div class="form-errors" role="alert">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        {% for field in form %}
+            <div class="field-group">
+
+                <label for="{{ field.id_for_label }}">
+                    {{ field.label }}
+                    {% if field.field.required %}
+                        <span aria-label="Obligatorio">*</span>
+                    {% endif %}
+                </label>
+
+                {{ field }}
+
+                {% if field.help_text %}
+                    <small class="field-help">
+                        {{ field.help_text }}
+                    </small>
+                {% endif %}
+
+                {% if field.errors %}
+                    <div class="field-errors" role="alert">
+                        {{ field.errors }}
+                    </div>
+                {% endif %}
+
+            </div>
+        {% endfor %}
+
+        <div class="form-actions">
+            <a
+                href="{% url 'libro_list' %}"
+                class="form-btn btn-cancel">
+                Cancelar
+            </a>
+
+            <button type="submit" class="form-btn btn-save">
+                Guardar libro
+            </button>
+        </div>
+    </form>
+
 </div>
+
 {% endblock %}

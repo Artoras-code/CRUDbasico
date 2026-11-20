@@ -1,29 +1,105 @@
+
 {% extends "libros/base.html" %}
+
+{% block title %}Catálogo de libros | Biblioteca{% endblock %}
+
 {% block content %}
-<div class="toolbar">
-  <a class="btn" href="{% url 'libro_create' %}">+ Nuevo libro</a>
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'libros/libro_list.css' %}">
+
+<div class="books-heading">
+    <div>
+        <h2>📖 Catálogo de libros</h2>
+        <p class="books-subtitle">
+            Consulta y administra los registros de la biblioteca.
+        </p>
+    </div>
+
+    {% if perms.libros.add_libro %}
+        <a href="{% url 'libro_create' %}" class="add-book-btn">
+            + Nuevo libro
+        </a>
+    {% endif %}
 </div>
-<div class="card">
-  <table>
-    <thead>
-      <tr><th>Título</th><th>Año</th><th>ISBN</th><th>Estado</th><th></th></tr>
-    </thead>
-    <tbody>
-    {% for l in libros %}
-      <tr>
-        <td>{{ l.titulo }}</td>
-        <td>{{ l.anio_publicacion }}</td>
-        <td>{{ l.isbn }}</td>
-        <td><span class="badge">{{ l.get_estado_display }}</span></td>
-        <td class="acciones">
-          <a href="{% url 'libro_update' l.pk %}">Editar</a>
-          <a href="{% url 'libro_delete' l.pk %}">Eliminar</a>
-        </td>
-      </tr>
-    {% empty %}
-      <tr><td colspan="5">No hay libros registrados.</td></tr>
-    {% endfor %}
-    </tbody>
-  </table>
+
+<div class="table-wrapper">
+    <table class="books-table">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Año</th>
+                <th>ISBN</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for l in libros %}
+                <tr>
+                    <td>
+                        <span class="book-title">
+                            {{ l.titulo }}
+                        </span>
+                    </td>
+
+                    <td>{{ l.anio_publicacion }}</td>
+
+                    <td>
+                        <span class="isbn-value">
+                            {{ l.isbn }}
+                        </span>
+                    </td>
+
+                    <td>
+                        <span class="status-badge status-{{ l.estado }}">
+                            {{ l.get_estado_display }}
+                        </span>
+                    </td>
+
+                    <td>
+                        <div class="book-actions">
+
+                            {% if perms.libros.change_libro %}
+                                <a
+                                    class="action-link edit-link"
+                                    href="{% url 'libro_update' l.pk %}">
+                                    Editar
+                                </a>
+                            {% endif %}
+
+                            {% if perms.libros.delete_libro %}
+                                <a
+                                    class="action-link delete-link"
+                                    href="{% url 'libro_delete' l.pk %}">
+                                    Eliminar
+                                </a>
+                            {% endif %}
+
+                            {% if not perms.libros.change_libro and not perms.libros.delete_libro %}
+                                <span class="solo-lectura">
+                                    Solo lectura
+                                </span>
+                            {% endif %}
+
+                        </div>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5" class="empty-library">
+                        <span class="empty-icon">📚</span>
+                        No hay libros registrados.
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
+
+<p class="books-footer">
+    Biblioteca · Sistema de gestión de libros
+</p>
+
 {% endblock %}

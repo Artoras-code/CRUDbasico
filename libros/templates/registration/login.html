@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Iniciar sesión | Biblioteca</title>
+
+    {% load static %}
+<link rel="stylesheet" href="{% static 'libros/login.css' %}">
+</head>
+
+<body>
+
+    <main class="login-card">
+
+        <div class="logo">📚</div>
+
+        <h1>Biblioteca</h1>
+
+        <p class="subtitle">
+            Bienvenido al sistema de gestión de libros.
+            Ingresa tus credenciales para continuar.
+        </p>
+
+        <!-- Mensajes de Django -->
+        {% for message in messages %}
+            {% if "success" in message.tags %}
+                <div class="success" role="status">
+                    <span class="success-icon">✓</span>
+
+                    <span>
+                        {{ message }}
+                    </span>
+                </div>
+            {% endif %}
+        {% endfor %}
+
+        <!-- Credenciales incorrectas -->
+        {% if form.errors %}
+            <div class="error" role="alert">
+                Usuario o contraseña incorrectos.
+                Inténtalo nuevamente.
+            </div>
+        {% endif %}
+
+        <!-- Formulario protegido con CSRF -->
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+
+            <input
+                type="hidden"
+                name="next"
+                value="{{ next }}"
+            >
+
+            <div class="field">
+                <label for="id_username">
+                    Usuario
+                </label>
+
+                {{ form.username }}
+            </div>
+
+            <div class="field">
+                <label for="id_password">
+                    Contraseña
+                </label>
+
+                {{ form.password }}
+            </div>
+
+            <button class="login-btn" type="submit">
+                Iniciar sesión
+            </button>
+        </form>
+
+        <div class="footer">
+            Biblioteca · Desarrollo Seguro · Evaluación 3
+        </div>
+
+    </main>
+
+</body>
+</html>

@@ -1,14 +1,74 @@
+
 {% extends "libros/base.html" %}
+
+{% block title %}Eliminar libro | Biblioteca{% endblock %}
+
 {% block content %}
-<div class="card">
-  <h2>Eliminar libro</h2>
-  <p>¿Seguro que quieres eliminar «{{ libro.titulo }}»?</p>
-  <form method="post">
-    {% csrf_token %}
-    <div class="acciones-form">
-      <button class="btn btn-danger" type="submit">Sí, eliminar</button>
-      <a class="btn-link btn" href="{% url 'libro_list' %}">Cancelar</a>
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'libros/libro_confirm_delete.css' %}">
+
+<div class="delete-container">
+
+    <div class="delete-heading">
+        <div class="delete-icon">🗑️</div>
+
+        <h2>¿Eliminar este libro?</h2>
+
+        <p>
+            Estás a punto de eliminar un registro
+            de la biblioteca.
+        </p>
     </div>
-  </form>
+
+    <div class="delete-book-info">
+        <div class="delete-book-label">
+            Libro seleccionado
+        </div>
+
+        <div class="delete-book-title">
+            📖 {{ libro.titulo }}
+        </div>
+
+        <div class="delete-book-details">
+            Año: {{ libro.anio_publicacion }}
+            · ISBN: {{ libro.isbn }}
+        </div>
+    </div>
+
+    <div class="delete-warning" role="alert">
+        <span class="delete-warning-icon">⚠️</span>
+
+        <div>
+            <strong>Esta acción es permanente</strong>
+
+            <p>
+                Si confirmas la eliminación, el registro
+                será eliminado de la biblioteca.
+                Esta operación no se puede deshacer
+                desde la aplicación.
+            </p>
+        </div>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="delete-actions">
+            <a
+                href="{% url 'libro_list' %}"
+                class="delete-btn delete-cancel">
+                Cancelar
+            </a>
+
+            <button
+                type="submit"
+                class="delete-btn delete-confirm">
+                Sí, eliminar libro
+            </button>
+        </div>
+    </form>
+
 </div>
+
 {% endblock %}

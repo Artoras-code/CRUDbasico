@@ -1,11 +1,37 @@
+# Entornos virtuales
 .venv/
-__pycache__/
-*.pyc
-db.sqlite3
+venv/
+
+# Variables de entorno y secretos
 .env
-.venv/
-__pycache__/
-*.pyc
+.env.*
+!.env.example
+
+# Bases de datos locales
 db.sqlite3
-.env
+*.sqlite3
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Coverage.py
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# SonarQube
+.scannerwork/
+
+# Archivos estáticos generados
 staticfiles/
+
+# Scripts auxiliares temporales
+extraer_css.py
+conectar_css.py
+
+# Archivos del editor
+.vscode/
+.idea/
